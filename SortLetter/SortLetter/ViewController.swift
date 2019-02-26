@@ -7,28 +7,187 @@
 //
 
 import UIKit
+import AVFoundation
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, GameViewDelegate {
+    
+    // MARK: - Property
+    let MARGINE:CGFloat = 10
+    let BUTTON_SIZE:CGFloat = 48
+    let BUTTON_ALPHA:CGFloat = 0.4
+    let TOOLBAR_HEIGHT:CGFloat = 44
+    var screenWidth:CGFloat!
+    var screenHeight:CGFloat!
+    var gameView:GameView!
+    var bgMusicPlayer:AVAudioPlayer!
+    var speedShow:UILabel!
+    var scoreShow:UILabel!
+    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        //test
-//        test()
+//        createDictionary()
+//        searchWord(keyword: "YncHroN")
         
-        let keyword = "YncHroN"
+        startTetris()
+    }
+    
+    // MARK: - 俄罗斯方块 Tetris
+    func startTetris() {
+        view.backgroundColor = UIColor.white
+        
+        let rect = UIScreen.main.bounds
+        screenWidth = rect.size.width
+        screenHeight = rect.size.height
+        
+        addToolBar()
+        
+        let gameRect = CGRect(x: rect.origin.x + MARGINE, y: rect.origin.y + TOOLBAR_HEIGHT + MARGINE*2, width: rect.size.width - MARGINE*2, height: rect.size.height - BUTTON_SIZE * 2 - TOOLBAR_HEIGHT)
+        gameView = GameView(frame: gameRect)
+        gameView.delegate = self
+        self.view.addSubview(gameView)
+        
+        gameView.startGame()
+    
+        addButtons()
+        
+        //添加背景音乐
+        let bgMusicUrl = Bundle.main.url(forResource: "1757", withExtension: "mp3")
+        
+        do
+        {
+            try bgMusicPlayer = AVAudioPlayer(contentsOf: bgMusicUrl!)
+        } catch {
+            
+        }
+        bgMusicPlayer.numberOfLoops = -1
+        bgMusicPlayer.play()
+    }
+    
+    func addToolBar()
+    {
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: MARGINE*2, width: screenWidth, height: TOOLBAR_HEIGHT))
+        self.view.addSubview(toolBar)
+        
+        //创建一个显示速度的标签
+        let speedLabel = UILabel()
+        speedLabel.frame = CGRect(x: 0,y: 0,width: 50, height: TOOLBAR_HEIGHT)
+        speedLabel.text = "速度:"
+        let speedLabelItem = UIBarButtonItem(customView: speedLabel)
+        
+        //创建第二个显示速度值得标签
+        speedShow = UILabel()
+        speedShow.frame = CGRect(x: 0,y: 0,width: 20,height: TOOLBAR_HEIGHT)
+        speedShow.textColor = UIColor.red
+        let speedShowItem = UIBarButtonItem(customView: speedShow)
+        
+        //创建第三个显示当前积分的标签
+        let scoreLabel = UILabel()
+        scoreLabel.frame = CGRect(x: 0,y: 0, width: 90, height: TOOLBAR_HEIGHT)
+        scoreLabel.text = "当前积分:"
+        let scoreLabelItem = UIBarButtonItem(customView: scoreLabel)
+        
+        //创建第四个显示当前积分值标签
+        scoreShow = UILabel()
+        scoreShow.frame = CGRect(x: 0, y: 0,width:  40,height: TOOLBAR_HEIGHT)
+        scoreShow.textColor = UIColor.red
+        let scoreShowItem = UIBarButtonItem(customView: scoreShow)
+        
+        let flexItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        toolBar.items = [speedLabelItem,speedShowItem,flexItem,scoreLabelItem,scoreShowItem]
+    }
+    
+    //定义方向
+    func addButtons()
+    {
+        
+        //left
+        let leftBtn = UIButton()
+        leftBtn.frame = CGRect(x: screenWidth - BUTTON_SIZE*3 - MARGINE, y: screenHeight - BUTTON_SIZE - MARGINE, width: BUTTON_SIZE, height: BUTTON_SIZE)
+        leftBtn.alpha = BUTTON_ALPHA
+        leftBtn.setTitle("←", for: UIControl.State.normal)
+        leftBtn.setTitleColor(UIColor.orange, for: UIControl.State.normal)
+        leftBtn.addTarget(self, action: #selector(left(sender:)), for: .touchUpInside)
+        self.view.addSubview(leftBtn)
+        
+        //up
+        let upBtn = UIButton()
+        upBtn.frame = CGRect(x: screenWidth - BUTTON_SIZE*2 - MARGINE, y: screenHeight - BUTTON_SIZE*2 - MARGINE, width: BUTTON_SIZE, height: BUTTON_SIZE)
+        upBtn.alpha = BUTTON_ALPHA
+        upBtn.setTitle("↑", for: UIControl.State.normal)
+        upBtn.setTitleColor(UIColor.orange, for: UIControl.State.normal)
+        upBtn.addTarget(self, action: #selector(up(sender:)), for: .touchUpInside)
+        self.view.addSubview(upBtn)
+        
+        //right
+        let rightBtn = UIButton()
+        rightBtn.frame = CGRect(x: screenWidth - BUTTON_SIZE - MARGINE, y: screenHeight - BUTTON_SIZE - MARGINE, width: BUTTON_SIZE, height: BUTTON_SIZE)
+        rightBtn.alpha = BUTTON_ALPHA
+        rightBtn.setTitle("→", for: .normal)
+        rightBtn.setTitleColor(UIColor.orange, for: .normal)
+        rightBtn.addTarget(self, action: #selector(right(sender:)), for: .touchUpInside)
+        self.view.addSubview(rightBtn)
+        
+        //down
+        let downBtn = UIButton()
+        downBtn.frame = CGRect(x: screenWidth - BUTTON_SIZE*2 - MARGINE, y: screenHeight - BUTTON_SIZE - MARGINE, width: BUTTON_SIZE, height: BUTTON_SIZE)
+        downBtn.alpha = BUTTON_ALPHA
+        downBtn.setTitle("↓", for: .normal)
+        downBtn.setTitleColor(UIColor.orange, for: .normal)
+        downBtn.addTarget(self, action: #selector(down(sender:)), for: .touchUpInside)
+        self.view.addSubview(downBtn)
+        
+    }
+    
+    @objc func left(sender:UIButton)
+    {
+        gameView.moveLeft()
+    }
+    
+    @objc func up(sender:UIButton)
+    {
+        gameView.rotate()
+    }
+    
+    @objc func right(sender:UIButton)
+    {
+        gameView.moveRight()
+    }
+    
+    @objc func down(sender:UIButton)
+    {
+        gameView.moveDown()
+    }
+    
+    // MARK:- GameViewDelegate
+    func updateScore(score: Int) {
+        //跟新分数
+        self.scoreShow.text = "\(score)"
+    }
+    
+    func updateSpeed(speed: Int) {
+        //跟新速度
+        self.speedShow.text = "\(speed)"
+    }
+
+    
+    // MARK: - 从牛津简明英汉词库中检索单词
+    func searchWord(keyword: String) {
+        DLog(keyword)
         let response: (word: String, mean: String?, exact: Bool) = SQLiteHelper.shareHelper.searchFromOxfordDict(keyword: keyword)
         if (response.mean != nil) && response.exact {
-            print("Find it!\n\(response.word) : \(response.mean!)")
+            DLog("Find it!\n\(response.word) : \(response.mean!)")
         } else if (response.mean != nil) && !response.exact {
-            print("Sorry: Can't find the meaning of \(keyword).\nAre you looking for\n\(response.word) : \(response.mean!)")
+            DLog("Sorry: Can't find the meaning of \(keyword).\nAre you looking for\n\(response.word) : \(response.mean!)")
         } else {
-            print("Sorry: Can't find the meaning of \(keyword).")
+            DLog("Sorry: Can't find the meaning of \(keyword).")
         }
     }
     
-    func test() {
+    // MARK: - 读取本地txt文档并存储到数据库中(用于生成牛津简明英汉字典数据库)
+    func createDictionary() {
         let filePath = Bundle.main.path(forResource: "Oxford-Chinese-Dictonary", ofType: "txt")
         let fileContent: NSString? = TXTReadHelper.fetchStringFromFile(filePath: filePath!)
         // print(fileContent ?? "Error: fileContent is Nil")

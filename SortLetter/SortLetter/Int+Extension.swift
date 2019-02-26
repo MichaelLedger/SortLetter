@@ -34,3 +34,14 @@ extension Int {
         return temp
     }
 }
+
+// 重载+运算符，让+支持Int + Double运算
+func + (left: Int , right:Double) -> Double
+{
+    return Double(left) + right
+}
+// 重载-运算符，让+支持Int - Double运算
+func - (left: Int , right:Double) -> Double
+{
+    return Double(left) - right
+}
