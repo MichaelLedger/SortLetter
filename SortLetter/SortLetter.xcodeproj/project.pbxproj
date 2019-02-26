@@ -13,6 +13,7 @@
 		AA4F7595222515540082F2BC /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4F7594222515540082F2BC /* Block.swift */; };
 		AA4F7598222518E10082F2BC /* 1757.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA4F7596222518E10082F2BC /* 1757.mp3 */; };
 		AA4F7599222518E10082F2BC /* shake.wav in Resources */ = {isa = PBXBuildFile; fileRef = AA4F7597222518E10082F2BC /* shake.wav */; };
+		AA4F759F22251C880082F2BC /* Finger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4F759E22251C880082F2BC /* Finger.swift */; };
 		AA5378E9221E39F000041D11 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5378E8221E39F000041D11 /* AppDelegate.swift */; };
 		AA5378EB221E39F000041D11 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5378EA221E39F000041D11 /* ViewController.swift */; };
 		AA5378EE221E39F000041D11 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA5378EC221E39F000041D11 /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 		AA4F7594222515540082F2BC /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		AA4F7596222518E10082F2BC /* 1757.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 1757.mp3; sourceTree = "<group>"; };
 		AA4F7597222518E10082F2BC /* shake.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = shake.wav; sourceTree = "<group>"; };
+		AA4F759E22251C880082F2BC /* Finger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finger.swift; sourceTree = "<group>"; };
 		AA5378E5221E39F000041D11 /* SortLetter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SortLetter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA5378E8221E39F000041D11 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA5378EA221E39F000041D11 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				AA4F7594222515540082F2BC /* Block.swift */,
 				AA4F7596222518E10082F2BC /* 1757.mp3 */,
 				AA4F7597222518E10082F2BC /* shake.wav */,
+				AA4F759E22251C880082F2BC /* Finger.swift */,
 			);
 			path = SortLetter;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 				AA5378EB221E39F000041D11 /* ViewController.swift in Sources */,
 				AA4F7591222510FA0082F2BC /* DLog.swift in Sources */,
 				AA5378FF221E472D00041D11 /* TXTReadHelper.swift in Sources */,
+				AA4F759F22251C880082F2BC /* Finger.swift in Sources */,
 				AA5378E9221E39F000041D11 /* AppDelegate.swift in Sources */,
 				AA4F7595222515540082F2BC /* Block.swift in Sources */,
 				AA4F7593222514D60082F2BC /* GameView.swift in Sources */,
